@@ -8,9 +8,7 @@ import { Table } from "../../components/Table";
 import { Button, Dropdown } from "react-bootstrap";
 
 const DisplayPayment = () => {
-  const [isDataFiltered, setIsDataFiltered] = useState(false);
-
-  const {
+ const {
     setLoadData,
     resultsarray,
     setFilteredDataVal,
@@ -18,6 +16,8 @@ const DisplayPayment = () => {
     isLoadMoreRequired,
     nextPageIndex,
     getPaymentData,
+    isDataFiltered, 
+    setIsDataFiltered
   } = usePaymentDataContext();
 
   useEffect(() => {

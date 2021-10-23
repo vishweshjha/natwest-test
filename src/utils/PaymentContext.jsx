@@ -8,15 +8,15 @@ export function usePaymentDataContext() {
 }
 
 export function PaymentDataProvider({ children }) {
-
   const [resultsarray, setResultsArray] = useState({});
-  const [filteredData, setFilteredData] = useState([])
-  const [loadData, setLoadData] = useState(false)
-  const [filteredDataVal, setFilteredDataVal] = useState('')
+  const [filteredData, setFilteredData] = useState([]);
+  const [loadData, setLoadData] = useState(false);
+  const [filteredDataVal, setFilteredDataVal] = useState("");
   const [isLoadMoreRequired, setIsLoadMoreRequired] = useState(false);
-  const [nextPageIndex, setNextPageIndex] = useState('')
+  const [nextPageIndex, setNextPageIndex] = useState("");
+  const [isDataFiltered, setIsDataFiltered] = useState(false);
 
-  const URL = "http://localhost:9001/api/payments"
+  const URL = "http://localhost:9001/api/payments";
 
   const getPaymentData = async (nextIndex) => {
     const { data } = await axios.get(URL, {
@@ -26,6 +26,7 @@ export function PaymentDataProvider({ children }) {
       let updatedResponse = data;
       if (isLoadMoreRequired) {
         updatedResponse.results.push(...resultsarray.results);
+        setIsDataFiltered(false);
       }
       setResultsArray(updatedResponse);
       setNextPageIndex(updatedResponse.metaDatal.nextPageIndex);
@@ -37,17 +38,29 @@ export function PaymentDataProvider({ children }) {
   }, [loadData]);
 
   useEffect(() => {
-    if(filteredDataVal){
-        const updatedData = resultsarray.results.filter(
-            (item) => item.paymentStatus === filteredDataVal
-          );
-         setFilteredData(updatedData)
+    if (filteredDataVal) {
+      const updatedData = resultsarray.results.filter(
+        (item) => item.paymentStatus === filteredDataVal
+      );
+      setFilteredData(updatedData);
     }
   }, [filteredDataVal]);
 
-
   return (
-    <PaymentDataContext.Provider value={{setLoadData,resultsarray, setFilteredDataVal, filteredData, isLoadMoreRequired, setIsLoadMoreRequired, getPaymentData, nextPageIndex}}>
+    <PaymentDataContext.Provider
+      value={{
+        setLoadData,
+        resultsarray,
+        setFilteredDataVal,
+        filteredData,
+        isLoadMoreRequired,
+        setIsLoadMoreRequired,
+        getPaymentData,
+        nextPageIndex,
+        isDataFiltered,
+        setIsDataFiltered,
+      }}
+    >
       {children}
     </PaymentDataContext.Provider>
   );
