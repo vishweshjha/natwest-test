@@ -4,6 +4,7 @@ import { default as BootstrapTable } from "react-bootstrap/Table";
 const Table = (props) => {
   const { header, row, paymentTerms } = props;
 
+//Rendering Header for table
   const RenderHeader = () => {
     return (
       <thead>
@@ -16,6 +17,7 @@ const Table = (props) => {
     );
   };
 
+  //Rendering Body for Table
   const RenderBody = () => {
     return row.map((item, i) => {
       const {

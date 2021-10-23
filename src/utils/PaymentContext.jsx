@@ -16,9 +16,10 @@ export function PaymentDataProvider({ children }) {
   const [isLoadMoreRequired, setIsLoadMoreRequired] = useState(false);
   const [nextPageIndex, setNextPageIndex] = useState('')
 
+  const URL = "http://localhost:9001/api/payments"
 
   const getPaymentData = async (nextIndex) => {
-    const { data } = await axios.get("http://localhost:9001/api/payments", {
+    const { data } = await axios.get(URL, {
       params: { pagelndex: nextIndex },
     });
     if (data) {
