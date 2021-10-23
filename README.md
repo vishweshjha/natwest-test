@@ -14,5 +14,8 @@ Used context API to make data avaialble for all the components for future needs.
 ## What you can expect in future updates.
 
 Implementation of Test Cases.
+
 Implementation of Styled Components.
+
+Implementation of Error Handling scenario 
 
