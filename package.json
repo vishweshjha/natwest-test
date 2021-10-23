@@ -3,11 +3,14 @@
     "version": "1.0.0",
     "description": "",
     "main": "src/index.js",
+    "homepage": "http://vishweshjha.github.io/natwest-test",
     "scripts": {
         "stub-api": "node stub-api/index.js",
         "webpack-serve": "webpack serve",
         "start": "run-p stub-api webpack-serve",
-        "test": "echo \"Error: no test specified && exit 1"
+        "test": "echo \"Error: no test specified && exit 1",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build"
     },
     "author": "",
     "license": "ISC",
@@ -29,6 +32,7 @@
         "dayjs": "^1.10.6",
         "express": "^4.17.1",
         "faker": "^5.5.3",
+        "gh-pages": "^3.2.3",
         "html-webpack-plugin": "^5.3.2",
         "npm-run-all": "^4.1.5",
         "randomstring": "^1.2.1",
