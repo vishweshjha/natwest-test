@@ -8,30 +8,27 @@ import { Table } from "../../components/Table";
 import { Button, Dropdown } from "react-bootstrap";
 
 const DisplayPayment = () => {
- const {
-    setLoadData,
-    resultsarray,
-    setFilteredDataVal,
-    filteredData,
-    isLoadMoreRequired,
-    nextPageIndex,
-    getPaymentData,
-    isDataFiltered, 
-    setIsDataFiltered
-  } = usePaymentDataContext();
+  const { state, setState, getPaymentData } = usePaymentDataContext();
 
   useEffect(() => {
-    setLoadData(true);
+    setState({ ...state, loadData: true });
   }, []);
 
   const handleSelect = (e) => {
-    setFilteredDataVal(e);
-    setIsDataFiltered(true);
+    setState({ ...state, filteredDataVal: e, isDataFiltered: true });
   };
 
   const reset = () => {
-    setIsDataFiltered(false);
+    setState({ ...state, isDataFiltered: false });
   };
+
+  const {
+    resultsarray,
+    isLoadMoreRequired,
+    filteredData,
+    isDataFiltered,
+    nextPageIndex,
+  } = state;
 
   return (
     <div className="mb-4">

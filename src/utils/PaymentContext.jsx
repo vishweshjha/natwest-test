@@ -8,13 +8,17 @@ export function usePaymentDataContext() {
 }
 
 export function PaymentDataProvider({ children }) {
-  const [resultsarray, setResultsArray] = useState({});
-  const [filteredData, setFilteredData] = useState([]);
-  const [loadData, setLoadData] = useState(false);
-  const [filteredDataVal, setFilteredDataVal] = useState("");
-  const [isLoadMoreRequired, setIsLoadMoreRequired] = useState(false);
-  const [nextPageIndex, setNextPageIndex] = useState("");
-  const [isDataFiltered, setIsDataFiltered] = useState(false);
+  const [state, setState] = useState({
+    resultsarray: {},
+    filteredData: [],
+    loadData: false,
+    filteredDataVal: "",
+    isLoadMoreRequired: false,
+    nextPageIndex: "",
+    isDataFiltered: false,
+  });
+
+  const { filteredDataVal, isLoadMoreRequired, resultsarray } = state;
 
   const URL = "http://localhost:9001/api/payments";
 
@@ -26,39 +30,33 @@ export function PaymentDataProvider({ children }) {
       let updatedResponse = data;
       if (isLoadMoreRequired) {
         updatedResponse.results.push(...resultsarray.results);
-        setIsDataFiltered(false);
+        setState({...state, isDataFiltered: false});
       }
-      setResultsArray(updatedResponse);
-      setNextPageIndex(updatedResponse.metaDatal.nextPageIndex);
-      setIsLoadMoreRequired(updatedResponse.metaDatal.hasMoreElements);
+      setState({ ...state,
+        resultsarray: updatedResponse,
+        nextPageIndex: updatedResponse.metaDatal.nextPageIndex,
+        isLoadMoreRequired: updatedResponse.metaDatal.hasMoreElements,});
     }
   };
   useEffect(() => {
     getPaymentData();
-  }, [loadData]);
+  }, []);
 
   useEffect(() => {
     if (filteredDataVal) {
       const updatedData = resultsarray.results.filter(
         (item) => item.paymentStatus === filteredDataVal
       );
-      setFilteredData(updatedData);
+      setState({...state,filteredData:updatedData})
     }
   }, [filteredDataVal]);
 
   return (
     <PaymentDataContext.Provider
       value={{
-        setLoadData,
-        resultsarray,
-        setFilteredDataVal,
-        filteredData,
-        isLoadMoreRequired,
-        setIsLoadMoreRequired,
-        getPaymentData,
-        nextPageIndex,
-        isDataFiltered,
-        setIsDataFiltered,
+        state,
+        setState,
+        getPaymentData
       }}
     >
       {children}

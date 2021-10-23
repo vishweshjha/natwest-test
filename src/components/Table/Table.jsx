@@ -10,7 +10,7 @@ const Table = (props) => {
       <thead>
         <tr>
           {Object.values(header).map((item, i) => (
-            <th>{item}</th>
+            <th key={i}>{item}</th>
           ))}
         </tr>
       </thead>
@@ -28,7 +28,7 @@ const Table = (props) => {
         paymentDate,
       } = item;
       return (
-        <tbody>
+        <tbody key={i}>
           <tr>
             <td>
               <table>
