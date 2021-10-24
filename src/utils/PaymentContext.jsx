@@ -35,21 +35,16 @@ export function PaymentDataProvider({ children }) {
         setAppState({
           ...appState,
           resultsarray: updatedResponse,
+          filteredData: filteredDataVal? filterResult : [] ,
+          isDataFiltered: filteredDataVal ? true : false,
         });
-        if (filteredDataVal) {
-          setAppState({
-            ...appState,
-            resultsarray: updatedResponse,
-            filteredData: filterResult,
-            isDataFiltered: true,
-          });
-        }
       } else {
         setAppState({
           ...appState,
           resultsarray: updatedResponse,
           nextPageIndex: updatedResponse.metaDatal.nextPageIndex,
           isLoadMoreRequired: updatedResponse.metaDatal.hasMoreElements,
+          isDataFiltered: false
         });
       }
     }
