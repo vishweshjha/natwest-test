@@ -9,7 +9,7 @@ Then run `npm start` and open <localhost:9000> in your browser.
 
 ## Implementation 
 
-Used context API to make data avaialble for all the components for future needs. 
+Used context API to make data available for all the components for future needs. 
 
 ## What you can expect in future updates.
 

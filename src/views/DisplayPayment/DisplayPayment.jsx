@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { usePaymentDataContext } from "../../utils/PaymentContext";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { headers, paymentTerms } from "./constant";
 import { Table } from "../../components/Table";
-import { Button, Dropdown } from "react-bootstrap";
+import { Button, Dropdown, Badge } from "react-bootstrap";
 
 const DisplayPayment = () => {
-  const { state, setState, getPaymentData } = usePaymentDataContext();
+  const { appState, setAppState, getPaymentData } = usePaymentDataContext();
 
   useEffect(() => {
-    setState({ ...state, loadData: true });
+    setAppState({ ...appState, loadData: true });
   }, []);
 
   const handleSelect = (e) => {
-    setState({ ...state, filteredDataVal: e, isDataFiltered: true });
+    setAppState({ ...appState, filteredDataVal: e, isDataFiltered: true });
   };
 
   const reset = () => {
-    setState({ ...state, isDataFiltered: false });
+    setAppState({ ...appState, isDataFiltered: false });
   };
 
   const {
@@ -28,7 +28,7 @@ const DisplayPayment = () => {
     filteredData,
     isDataFiltered,
     nextPageIndex,
-  } = state;
+  } = appState;
 
   return (
     <div className="mb-4">
@@ -62,14 +62,28 @@ const DisplayPayment = () => {
             paymentTerms={paymentTerms}
           />
           {isLoadMoreRequired && (
-            <Button
-              variant="primary"
-              size="lg"
-              disabled={!isLoadMoreRequired}
-              onClick={() => getPaymentData(nextPageIndex)}
-            >
-              Load More{" "}
-            </Button>
+            <div className="row">
+              <div className="col-8">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  disabled={!isLoadMoreRequired}
+                  onClick={() => getPaymentData(nextPageIndex)}
+                >
+                  Load More{" "}
+                </Button>
+              </div>
+              <div className="col-4 text-right">
+                <h5>
+                  Row Count{" "}
+                  <Badge bg="secondary">
+                    {isDataFiltered
+                      ? filteredData.length
+                      : resultsarray.results.length}
+                  </Badge>
+                </h5>
+              </div>
+            </div>
           )}
         </>
       )}

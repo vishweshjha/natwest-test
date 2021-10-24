@@ -8,7 +8,7 @@ export function usePaymentDataContext() {
 }
 
 export function PaymentDataProvider({ children }) {
-  const [state, setState] = useState({
+  const [appState, setAppState] = useState({
     resultsarray: {},
     filteredData: [],
     loadData: false,
@@ -18,8 +18,10 @@ export function PaymentDataProvider({ children }) {
     isDataFiltered: false,
   });
 
-  const { filteredDataVal, isLoadMoreRequired, resultsarray } = state;
+  const { filteredDataVal, isLoadMoreRequired, resultsarray, nextPageIndex } =
+    appState;
 
+  
   const URL = "http://localhost:9001/api/payments";
 
   const getPaymentData = async (nextIndex) => {
@@ -30,33 +32,58 @@ export function PaymentDataProvider({ children }) {
       let updatedResponse = data;
       if (isLoadMoreRequired) {
         updatedResponse.results.push(...resultsarray.results);
-        setState({...state, isDataFiltered: false});
+        setAppState({
+          ...appState,
+          resultsarray: updatedResponse,
+        });
+        if (filteredDataVal) {
+          setAppState({
+            ...appState,
+            resultsarray: updatedResponse,
+            filteredData: filterResult,
+            isDataFiltered: true,
+          });
+        }
+      } else {
+        setAppState({
+          ...appState,
+          resultsarray: updatedResponse,
+          nextPageIndex: updatedResponse.metaDatal.nextPageIndex,
+          isLoadMoreRequired: updatedResponse.metaDatal.hasMoreElements,
+        });
       }
-      setState({ ...state,
-        resultsarray: updatedResponse,
-        nextPageIndex: updatedResponse.metaDatal.nextPageIndex,
-        isLoadMoreRequired: updatedResponse.metaDatal.hasMoreElements,});
     }
   };
+
+
   useEffect(() => {
     getPaymentData();
   }, []);
 
+
+  const filterResult =
+    resultsarray.results &&
+    resultsarray.results.filter(
+      (item) => item.paymentStatus === filteredDataVal
+    );
+
+
   useEffect(() => {
     if (filteredDataVal) {
-      const updatedData = resultsarray.results.filter(
-        (item) => item.paymentStatus === filteredDataVal
-      );
-      setState({...state,filteredData:updatedData})
+      setAppState({
+        ...appState,
+        filteredData: filterResult,
+        isDataFiltered: true,
+      });
     }
   }, [filteredDataVal]);
 
   return (
     <PaymentDataContext.Provider
       value={{
-        state,
-        setState,
-        getPaymentData
+        appState,
+        setAppState,
+        getPaymentData,
       }}
     >
       {children}
