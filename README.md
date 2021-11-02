@@ -17,5 +17,7 @@ Implementation of Test Cases.
 
 Implementation of Styled Components.
 
+Use of useReducer hook to maintain state
+
 Implementation of Error Handling scenario 
 
